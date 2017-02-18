@@ -15,11 +15,11 @@ char* check(){
     strcat(buf,".txt");      
     fp=fopen(buf,"r"); 
     if(fp==NULL){
-        strcpy(buf,"Do not find buffer_overflow_code_injection_write_file.txt file,attack fail !!!\n");
+        strcpy(buf,"attack fail, Do not find buffer_overflow_code_injection_write_file.txt file !!!\n");
         return buf;
     }
     if(fgetc(fp)==EOF){
-        strcpy(buf," file is null, attack fail !!!\n");
+        strcpy(buf,"attack fail, file is null !!!\n");
         return buf;
     }
     fseek(fp, 0, SEEK_END);

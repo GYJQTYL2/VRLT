@@ -35,7 +35,8 @@ def check_difine_standard(name):
     input_path = os.path.abspath(os.path.join(name_path, 'input'))
     output_path = os.path.abspath(os.path.join(name_path, 'output'))
     document_path = os.path.abspath(os.path.join(name_path, 'document'))
-    if (not os.path.exists(vul_path)) | (not os.path.exists(check_path)) | (not os.path.exists(input_path)) | (not os.path.exists(output_path)) | (not os.path.exists(document_path)):
+    config_path = os.path.abspath(os.path.join(name_path, 'Config'))
+    if (not os.path.exists(vul_path)) | (not os.path.exists(check_path)) | (not os.path.exists(input_path)) | (not os.path.exists(output_path)) | (not os.path.exists(document_path)) | (not os.path.exists(config_path)):
         return False
     postfixs = []
     if not check_file(vul_path, name, postfixs):
@@ -55,6 +56,8 @@ def check_difine_standard(name):
         return False
     return True
 
+def clear_check_result():
+    check_result[:] = []
 
 
 
