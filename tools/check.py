@@ -2,15 +2,15 @@
 #coding:utf-8
 import os
 from ctypes import *
-global check_result
-check_result = []
+check_result = {}
 
 def check(name):
+    global check_result
     check_name = os.environ['CHECK_' + name + '_PATH'] + '.so'
     lib = cdll.LoadLibrary(check_name)
     lib.check.restype = c_char_p
     res = lib.check()
-    check_result.append(res)
+    check_result[name] = res
 
 def check_file(path, name, postfixs):
     flag = 0
@@ -54,10 +54,12 @@ def check_difine_standard(name):
     postfixs = ['.docx']
     if not check_file(document_path, name, postfixs):
         return False
+
     return True
 
 def clear_check_result():
-    check_result[:] = []
+    global check_result
+    check_result = {}
 
 
 

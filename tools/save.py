@@ -4,9 +4,8 @@ import os
 import subprocess
 import shutil
 import time
-from tools.check import *
-global attack_fail_nums
-global attack_success_nums
+import tools.check
+
 attack_fail_nums = 0
 attack_success_nums = 0
 
@@ -38,11 +37,15 @@ def cat_report(cat_report_name='report.txt'):
 def generator_report():
     global attack_fail_nums
     global attack_success_nums
-    for res in check_result:
-        if res.split(',')[0] == 'attack fail':
+    attack_fail_info = {}
+    attack_success_info = {}
+    for res in tools.check.check_result.keys():
+        if tools.check.check_result[res].split(',')[0] == 'attack fail':
             attack_fail_nums += 1
+            attack_fail_info[res] = tools.check.check_result[res]
         else:
             attack_success_nums += 1
+            attack_success_info[res] = tools.check.check_result[res]
     file_name = os.path.abspath(os.path.join(os.environ["REPORT_PATH"], 'report.txt'))
     fp = open(file_name, 'w')
     fpl = open(os.path.abspath(os.path.join(os.environ["REPORT_PATH"], 'log.txt')), 'a')
@@ -53,8 +56,18 @@ def generator_report():
     info = 'attack success numbers:' + str(attack_success_nums) + "\ndetail infomation: \n"
     fp.write(info)
     fpl.write(info)
-    for ret in check_result:
-        info = ret + "\n"
+    info = 'attack fail program: \n'
+    fp.write(info)
+    fpl.write(info)
+    for ret in attack_fail_info.keys():
+        info = ret + ": " + attack_fail_info[ret] + '\n'
+        fp.write(info)
+        fpl.write(info)
+    info = 'attack success program: \n'
+    fp.write(info)
+    fpl.write(info)
+    for ret in attack_success_info.keys():
+        info = ret + ": " + attack_success_info[ret] + '\n'
         fp.write(info)
         fpl.write(info)
     fp.close()

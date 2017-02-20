@@ -1,4 +1,3 @@
-vul_type=buffer_overflow
-attack_type=code_injection
+type=buffer_overflow,code_injection
 compile=gcc -fPIC -shared buffer_overflow_code_injection_write_file.c -o buffer_overflow_code_injection_write_file.so
 aslr=off

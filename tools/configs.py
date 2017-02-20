@@ -3,9 +3,9 @@
 import os
 import subprocess
 import sys
+#global c_config_infos,v_infos,e_infos,aslr_infos,compile_infos
 c_config_infos = {}
-v_infos = {}
-e_infos = {}
+type_infos = {}
 aslr_infos = {}
 compile_infos = {}
 def config_base_path():
@@ -49,7 +49,7 @@ def config_report_path():
 
 def config_config_path(name):
     config_path = os.path.abspath(os.path.join(os.environ["BASE_PATH"], name,  'Config'))
-    environ_name = 'CONFIG' + name + '_PATH'
+    environ_name = 'CONFIG_' + name + '_PATH'
     os.environ[environ_name] = config_path
 
 def config_normal_true():
@@ -139,6 +139,8 @@ def gdb(file_name='',pid=0, sudo=True):
     remove_path(environ_name)
 
 def get_config_info(names):
+    global c_config_infos
+    c_config_infos = {}
     for name in names:
         config_path = os.path.abspath(os.path.join(os.environ["BASE_PATH"], name,  'Config'))
         fp = open(config_path, 'r')
@@ -149,23 +151,26 @@ def get_config_info(names):
                 c_config_infos[name][config_info.split('=')[0]] = config_info.split('=')[1]
         fp.close()
 
-def get_v_info(names):
+def get_type_info(names):
+    global type_infos
+    type_infos = {}
     for name in names:
-        if(not v_infos.has_key(c_config_infos[name]['vul_type'])):
-            v_infos[c_config_infos[name]['vul_type']] = []
-        v_infos[c_config_infos[name]['vul_type']].append(names.index(name)+1)
+        types = c_config_infos[name]['type'].split(',')
+        for type in types:
+            if(not type_infos.has_key(type)):
+                type_infos[type] = []
+            type_infos[type].append(names.index(name)+1)
 
-def get_e_info(names):
-    for name in names:
-        if (not e_infos.has_key(c_config_infos[name]['attack_type'])):
-            e_infos[c_config_infos[name]['attack_type']] = []
-        e_infos[c_config_infos[name]['attack_type']].append(names.index(name)+1)
 
 def get_aslr_info(names):
+    global aslr_infos
+    aslr_infos = {}
     for name in names:
         aslr_infos[name] = c_config_infos[name]['aslr']
 
 def get_compile_info(names):
+    global compile_infos
+    compile_infos = {}
     for name in names:
         compile_infos[name] = c_config_infos[name]['compile']
 
